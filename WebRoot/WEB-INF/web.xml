@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="GB2312"?>
+<web-app version="2.4" xmlns="http://java.sun.com/xml/ns/j2ee" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://java.sun.com/xml/ns/j2ee http://java.sun.com/xml/ns/j2ee/web-app_2_4.xsd">
+    <!-- 配置AlbumServlet -->
+    <servlet>
+        <servlet-name>AlbumServlet</servlet-name>
+        <servlet-class>AlbumServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>AlbumServlet</servlet-name>
+        <url-pattern>/AlbumServlet</url-pattern>
+    </servlet-mapping>
+	<!-- 配置PhotoServlet -->
+	<servlet>
+        <servlet-name>PhotoServlet</servlet-name>
+        <servlet-class>PhotoServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>PhotoServlet</servlet-name>
+        <url-pattern>/PhotoServlet</url-pattern>
+    </servlet-mapping>
+	<!-- 配置应用程序首页 -->
+    <welcome-file-list>
+		<welcome-file>
+            index.jsp
+        </welcome-file>
+    </welcome-file-list>	
+    
+</web-app>

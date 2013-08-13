@@ -1,0 +1,83 @@
+配置数据源：加入Tomcat 6.0\conf目录下server.xml中最后的“</Host>”标记之前添加
+如下配置：
+	<Context path="/onlinealbum" docBase="Tomcat 6.0安装目录\webapps\onlinealbum"
+				 debug="5" reloadable="true" crossContext="true"   workDir="">
+		   <Resource   name="onlinealbumJNDI"
+					  auth="Container"
+			 type="javax.sql.DataSource"
+					  maxActive="100" maxIdle="30" maxWait="10000"
+					  username="root" password="tangtaibin"
+			 driverClassName="org.gjt.mm.mysql.Driver"
+			 url="jdbc:mysql://localhost/photos"/>
+	</Context>
+/*删除已有的photos数据库*/
+drop database photos;
+/*创建photos数据库*/
+create database photos;
+/*使用photos数据库*/
+use photos;
+/*创建用户表*/
+drop table users; 
+create table users
+(
+    user_name varchar(20) not null,
+    user_pwd varchar(20) not null,
+    UA_id varchar(10) not null,
+    constraint user_pk primary key (UA_id)
+);
+/*创建相册类型表*/
+drop table album_type;
+create table album_type
+(
+    album_type_id varchar(5) not null,
+    album_type_name varchar(20) not null,
+    constraint album_type_pk primary key (album_type_id)
+);
+/*创建用户相册关系表*/
+drop table user_album;
+create table user_album
+(
+    UA_id varchar(10) not null,
+    album_id varchar(10) not null,
+    album_name varchar(20) not null,
+    album_type_id varchar(5) not null,
+    new_time varchar(20) not null,
+    constraint user_album_pk primary key (album_id),
+    constraint user_album_fk foreign key (UA_id) references users(UA_id),
+    constraint album_type_fk foreign key (album_type_id) references album_type(album_type_id)
+);
+/*创建照片表*/
+drop table photos; 
+create table photos
+(
+    photo_id varchar(10) not null,    
+    album_id varchar(10) not null,
+    photo_name varchar(20) not null,
+    photo mediumblob not null,
+    constraint photo_pk primary key (photo_id),
+    constraint photo_fk foreign key (album_id) references user_album(album_id)
+);
+/*插入用户名和密码以及用户相册*/
+insert into users values('root','123456','54632345');
+/*插入相册类型*/
+insert into album_type values('10001','我的家庭');
+insert into album_type values('10002','个性生活');
+insert into album_type values('10003','朋友圈');
+insert into album_type values('10004','旅游见闻');
+/*用户相册信息*/
+insert into user_album values('54632345','53468132','我的相册1','10001',sysdate());
+
+SELECT album_type_id,album_type_name FROM album_type;
+SELECT ua.album_id,ua.album_name FROM user_album ua,users u WHERE u.user_name='tangtaibin';
+
+SELECT COUNT(p.album_id) FROM photos p WHERE p.album_id=ua.album_id AND GROUP BY p.album_id;
+
+SELECT ua.album_id,ua.album_name,ua.new_time,
+(SELECT at.album_type_name FROM album_type at WHERE at.album_type_id=ua.album_type_id),
+(SELECT COUNT(p.photo_id) FROM photos p WHERE p.album_id=ua.album_id),
+(SELECT at1.album_type_id FROM album_type at1 WHERE at1.album_type_id=ua.album_type_id)
+FROM user_album ua,users u WHERE u.user_name='tangtaibin';
+
+
+
+
