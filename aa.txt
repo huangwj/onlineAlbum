@@ -1,0 +1,26 @@
+
+
+load CLIENT from 'D:\cysale_data\Data\PM_AREASTOCKOUT.ixf' of del modified by codepage=1386 insert into PM_AREASTOCKOUT	@
+load CLIENT from 'D:\Program Files\QuestCenter\Data\P_WORKWHOUSE.ixf' of del modified BY IDENTITYOVERRIDE codepage=1386 insert into P_WORKWHOUSE
+--导入 非自动增量字段
+  import from 'D:\cysale_data\Data\G_MENU.ixf' of del insert into G_MENU
+
+--导入，含自动增量字段 
+--自动增量可编辑
+  load CLIENT from 'E:\cysale_data\PM_PROPOSAL.ixf' of del modified by codepage=1386 insert into PM_PROPOSAL	 
+--自动增量不可编辑
+load CLIENT from 'E:\cysale_data\G_SYCOMPANY.ixf' of del modified BY IDENTITYOVERRIDE codepage=1386 insert into G_SYCOMPANY
+--------------------
+例一：普通导入    
+    LOAD  FROM 'D:\tem\MONTH.DEL' OF IXF
+    MESSAGES 'D:\test\org.msg'
+    INSERT INTO org
+
+例二：对于id是由GENERATE ALWAYS 生成的导入
+    IMPORT FROM  C:\ORG2.IXF  OF IXF 
+     MODIFIED BY  IDENTITYIGNORE  
+     INSERT INTO ORG;
+
+
+-------------------------------------------
+
